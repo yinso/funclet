@@ -78,6 +78,12 @@ The next in chain should expect an array as the first parameter.
 
 `map` is also a top-level function. 
 
+### `thenMap(function(item, cb) { ... })`
+
+`thenMap` is a combination of `then` and `map`. It expects the previous function in the chain to return an array.
+
+`thenMap` is **not** a top level function, since it expects an array from previous call.
+
 ### `.each(array, function(item, cb) { ... })`
 
 `each` does `async.each` but in chainable style.  This is equivalent to
@@ -92,8 +98,10 @@ The next in chain should expect no result parameters.
 `each` is also a top-level function. 
 
 
+### `thenEach(function(item, cb) { ... })`
 
+`thenEach` is a combination of `then` and `each`. It expects the previous function in the chain to return an array.
 
-
+`thenEach` is **not** a top level function, since it expects an array from previous call.
 
 

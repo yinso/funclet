@@ -29,8 +29,14 @@ class Funclet
   map: (ary, proc) ->
     @then (next) ->
       async.map ary, proc, next
+  thenMap: (proc) -> # expects the previous function to return an array.
+    @then (ary, next) ->
+      async.map ary, proc, next
   each: (ary, proc) ->
     @then (next) ->
+      async.each ary, proc, next
+  thenEach: (proc) -> # expects the previous function to return an array.
+    @then (ary, next) ->
       async.each ary, proc, next
   catch: (@onError) ->
     @

@@ -54,13 +54,49 @@ describe 'funclet test', ->
           done null 
     catch e
       done e
-
+  
+  it 'can thenMap', (done) ->
+    try
+      funclet
+        .bind (next) ->
+          next null, [1,2,3,4]
+        .thenMap (num, next) ->
+          next null, num * num
+        .then (nums, next) ->
+          res = 0
+          for num in nums
+            res += num
+          next null, res
+        .catch(done)
+        .done (num) ->
+          assert.equal num, 30
+          done null
+    catch e
+      done e
   
   it 'can each', (done) ->
     try 
       result = 0
       funclet
         .each [1, 2, 3, 4], (i, next) ->
+          result += i * i
+          next null
+        .then (next) ->
+          next null
+        .catch(done)
+        .done () ->
+          assert.equal result, 30
+          done null
+    catch e
+      done e
+  
+  it 'can thenEach', (done) ->
+    try 
+      result = 0
+      funclet
+        .bind (next) ->
+          next null, [1,2,3,4]
+        .thenEach (i, next) ->
           result += i * i
           next null
         .then (next) ->
