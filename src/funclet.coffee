@@ -13,18 +13,11 @@ class Funclet
     @then (next) ->
       proc args..., next
   then: (proc) ->
-    if proc.length == 1
-      @calls.push (cb) ->
-        try 
-          proc cb 
-        catch e
-          cb e
-    else
-      @calls.push (res, cb) ->
-        try 
-          proc res, cb 
-        catch e
-          cb e
+    @calls.push (arg ..., cb) ->
+      try 
+        proc arg..., cb
+      catch e 
+        cb e
     @
   map: (ary, proc) ->
     @then (next) ->
@@ -43,16 +36,18 @@ class Funclet
   done: (lastCB = () ->) ->
     self = @
     interim = []
-    helper = (call, next) ->
+    helper = (func, next) ->
       cb = (err, res...) ->
-          loglet.debug 'funclet.done.helper.cb', err, interim
+          loglet.debug 'funclet.done.helper.cb', err, res
           if err 
             next err
           else 
             interim = res 
             next null 
       try 
-        call interim..., cb
+        loglet.debug 'funclet.done.helper', interim..., cb
+        func interim..., cb
+        #func.apply self, args
       catch e 
         cb e
     async.eachSeries @calls, helper, (err) ->
@@ -72,6 +67,9 @@ bind = (func, args...) ->
   Funclet.make().then (next) ->
     func args..., next
 
+start = (func) ->
+  Funclet.make().then func
+
 map = (ary, proc) ->
   Funclet.make().map ary, proc
 
@@ -79,6 +77,7 @@ each = (ary, proc) ->
   Funclet.make().each ary, proc
 
 module.exports = 
+  start: start
   bind: bind
   map: map
   each: each

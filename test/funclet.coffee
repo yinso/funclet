@@ -107,5 +107,34 @@ describe 'funclet test', ->
           done null
     catch e
       done e
+  
+  it 'can pass multiple arguments', (done) ->
+    try 
+      funclet
+        .bind (next) ->
+          next null, 1, 2, 3, 4
+        .then (a, b, c, d, next) ->
+          loglet.debug 'arguments', arguments
+          next null, a * a + b * b + c * c + d * d
+        .catch(done)
+        .done (num) ->
+          assert.equal num, 30
+          done null
+    catch e
+      done e
+  
+  it 'can use then as toplevel', (done) ->
+    try
+      funclet
+        .start (next) ->
+          next null, 1, 2, 3, 4
+        .then (a, b, c, d, next) ->
+          next null, a*a + b*b + c*c + d*d
+        .catch(done)
+        .done (num) ->
+          assert.equal num, 30
+          done null
+    catch e
+      done e
 
 
