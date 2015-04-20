@@ -84,6 +84,24 @@ The next in chain should expect an array as the first parameter.
 
 `thenMap` is **not** a top level function, since it expects an array from previous call.
 
+### `.mapSeries(array, function(item, cb) { ... })`
+
+`mapSeries` does `async.mapSeries` but in chainable style. This is equivalent to 
+
+    .then(function (next) {
+      async.mapSeries(array, function(item, cb) { ... }, next);
+    })
+
+The next in chain should expect an array as the first parameter. 
+
+`mapSeries` is also a top-level function. 
+
+### `thenMapSeries(function(item, cb) { ... })`
+
+`thenMapSeries` is a combination of `then` and `mapSeries`. It expects the previous function in the chain to return an array.
+
+`thenMapSeries` is **not** a top level function, since it expects an array from previous call.
+
 ### `.each(array, function(item, cb) { ... })`
 
 `each` does `async.each` but in chainable style.  This is equivalent to
@@ -97,11 +115,47 @@ The next in chain should expect no result parameters.
 
 `each` is also a top-level function. 
 
-
 ### `thenEach(function(item, cb) { ... })`
 
 `thenEach` is a combination of `then` and `each`. It expects the previous function in the chain to return an array.
 
 `thenEach` is **not** a top level function, since it expects an array from previous call.
 
+### `.eachSeries(array, function(item, cb) { ... })`
+
+`eachSeries` does `async.eachSeries` but in chainable style.  This is equivalent to
+
+    .then(function (next) {
+      async.eachSeries(array, function(item, cb) { ... }, next);
+    })
+
+
+The next in chain should expect no result parameters. 
+
+`eachSeries` is also a top-level function. 
+
+### `thenEachSeries(function(item, cb) { ... })`
+
+`thenEachSeries` is a combination of `then` and `eachSeries`. It expects the previous function in the chain to return an array.
+
+`thenEachSeries` is **not** a top level function, since it expects an array from previous call.
+
+### '.parallel([ function(cb) { ...}, ... ])
+
+`.parallel` does `async.parallel` but in chainable style. This is equivalent to 
+
+    .then(function (next) {
+      async.parallel(array, function(item, cb) { ... }, next);
+    })
+
+
+The next in chain expects an array of results.
+
+`parallel` is also a top-level function. 
+
+### `thenParallel()`
+
+`thenParallel` is a combination of `then` and `parallel`. It expects the previous function in the chain to return an array. It takes no parameters otherwise.
+
+`thenParallel` is **not** a top level function, since it expects an array from previous call.
 
